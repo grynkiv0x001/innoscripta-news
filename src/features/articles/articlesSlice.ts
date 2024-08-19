@@ -1,10 +1,8 @@
-// src/features/articles/articlesSlice.ts
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios, { AxiosResponse } from 'axios';
 
-// Define the structure of an article
 interface Article {
-  source: { id: string | null; name: string };
+  source: string;
   author: string | null;
   title: string;
   description: string;
@@ -14,7 +12,6 @@ interface Article {
   content: string;
 }
 
-// Define the state for the slice
 interface ArticlesSliceState {
   articles: Article[];
   status: 'idle' | 'loading' | 'failed' | 'success';
@@ -28,26 +25,43 @@ const initialState: ArticlesSliceState = {
   error: null,
 };
 
-// Replace with your NewsAPI key
-const NEWS_API_KEY = 'your_newsapi_key';
+// TODO: Move to .env
+const NEWS_API_KEY = '910d3cbd919044b8816401685ebeac2d';
+
+const nyt = 'bAvjbzlMS2eLKJZbbcCQAOGFTHGIVAeM';
+const nyt_secret = 'vyRn6hS5alEaZGaB';
+
+const thenewsapi = 'td9j6F3engxa0xy3wm7NgzZkDjBe3VbZzgwN91Ht';
+
+const guardianapi = '';
 
 const endpoints = [
   `https://newsapi.org/v2/top-headlines?country=us&apiKey=${NEWS_API_KEY}`,
-  // Add other endpoints here, e.g., from different sources
+  // `https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${nyt}`,
+  // `https://api.thenewsapi.com/v1/news/headlines?api_token=${thenewsapi}`
+  // `https://content.guardianapis.com/search?api-key=${guardianapi}`
 ];
 
-// Define the async thunk to fetch articles
 export const fetchArticles = createAsyncThunk<Article[]>(
   'articles/fetchArticles',
   async () => {
     const responses: AxiosResponse[] = await Promise.all(
       endpoints.map((url) => axios.get(url)),
     );
-    return responses.flatMap((response) => response.data.articles);
+
+    return responses.flatMap((response) => {
+      const data = response.data;
+      const articles = data.articles || data.response.docs;
+
+      return articles.map((article: any) => ({
+        ...article,
+        source: article.source?.name || article.source,
+        title: article.title || article.abstract,
+      }));
+    });
   },
 );
 
-// Define the articles slice
 const articlesSlice = createSlice({
   name: 'articles',
   initialState,
@@ -77,6 +91,5 @@ const articlesSlice = createSlice({
   },
 });
 
-// Export the actions and reducer
 export const { filterArticles } = articlesSlice.actions;
 export default articlesSlice.reducer;

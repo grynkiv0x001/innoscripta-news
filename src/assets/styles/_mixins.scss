@@ -1,0 +1,7 @@
+@mixin responsive($size) {
+  $query: map-get($breakpoints, $size);
+
+  @media (min-width: $query) {
+    @content;
+  }
+}

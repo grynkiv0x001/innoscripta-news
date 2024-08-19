@@ -1,10 +1,11 @@
 import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
+import svgr from 'vite-plugin-svgr';
 import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), svgr()],
   server: {
     open: true,
   },
@@ -18,6 +19,13 @@ export default defineConfig({
     alias: {
       src: path.resolve(__dirname, 'src'),
       '@': path.resolve(__dirname, 'src'),
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: '@import "src/assets/styles/include.scss";',
+      },
     },
   },
 });

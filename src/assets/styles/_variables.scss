@@ -1,0 +1,29 @@
+@import 'colors';
+
+$mobile: 568px;
+$tablet: 768px;
+$desktop: 992px;
+
+$breakpoints: (
+  "small": $mobile,
+  "medium": $tablet,
+  "large": $desktop,
+);
+
+:root {
+  @media (prefers-color-scheme: light) {
+    @include colors-light();
+  }
+
+  @media (prefers-color-scheme: dark) {
+    @include colors-dark();
+  }
+}
+
+:root[data-theme='light'] {
+  @include colors-light();
+}
+
+:root[data-theme='dark'] {
+  @include colors-dark();
+}

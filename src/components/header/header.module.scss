@@ -1,0 +1,16 @@
+.header {
+  background-color: red;
+
+  @include responsive('medium') {
+    background-color: green;
+  }
+
+  @include responsive('large') {
+    background-color: blue;
+  }
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}

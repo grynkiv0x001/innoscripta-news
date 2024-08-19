@@ -1,13 +1,13 @@
 import Articles from '@/features/articles/Articles';
+import Header from '@/components/header/Header';
+
+import style from './app.module.scss';
 
 const App = () => {
   return (
-    <div>
-      Hello
-
-      <div>
-        <Articles />
-      </div>
+    <div className={style.app}>
+      <Header />
+      <Articles />
     </div>
   );
 };

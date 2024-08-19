@@ -1,0 +1,7 @@
+$font-family: 'Roboto Flex';
+
+@font-face {
+  font-family: $font-family;
+  src: url('../fonts/RobotoFlex-VariableFont.ttf') format('truetype');
+  font-display: swap;
+}
