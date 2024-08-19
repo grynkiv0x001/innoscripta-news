@@ -4,8 +4,8 @@ import type { AppThunk } from '../../app/store';
 import { fetchCount } from './counterAPI';
 
 export interface CounterSliceState {
-  value: number
-  status: 'idle' | 'loading' | 'failed'
+  value: number;
+  status: 'idle' | 'loading' | 'failed';
 }
 
 const initialState: CounterSliceState = {
@@ -19,15 +19,15 @@ export const counterSlice = createAppSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
-  reducers: create => ({
-    increment: create.reducer(state => {
+  reducers: (create) => ({
+    increment: create.reducer((state) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
       state.value += 1;
     }),
-    decrement: create.reducer(state => {
+    decrement: create.reducer((state) => {
       state.value -= 1;
     }),
     // Use the `PayloadAction` type to declare the contents of `action.payload`
@@ -48,14 +48,14 @@ export const counterSlice = createAppSlice({
         return response.data;
       },
       {
-        pending: state => {
+        pending: (state) => {
           state.status = 'loading';
         },
         fulfilled: (state, action) => {
           state.status = 'idle';
           state.value += action.payload;
         },
-        rejected: state => {
+        rejected: (state) => {
           state.status = 'failed';
         },
       },
@@ -64,8 +64,8 @@ export const counterSlice = createAppSlice({
   // You can define your selectors here. These selectors receive the slice
   // state as their first argument.
   selectors: {
-    selectCount: counter => counter.value,
-    selectStatus: counter => counter.status,
+    selectCount: (counter) => counter.value,
+    selectStatus: (counter) => counter.status,
   },
 });
 
@@ -78,12 +78,12 @@ export const { selectCount, selectStatus } = counterSlice.selectors;
 
 // We can also write thunks by hand, which may contain both sync and async logic.
 // Here's an example of conditionally dispatching actions based on current state.
-export const incrementIfOdd =
-  (amount: number): AppThunk =>
-    (dispatch, getState) => {
-      const currentValue = selectCount(getState());
+export const incrementIfOdd = (amount: number): AppThunk => {
+  return (dispatch, getState) => {
+    const currentValue = selectCount(getState());
 
-      if (currentValue % 2 === 1 || currentValue % 2 === -1) {
-        dispatch(incrementByAmount(amount));
-      }
-    };
+    if (currentValue % 2 === 1 || currentValue % 2 === -1) {
+      dispatch(incrementByAmount(amount));
+    }
+  };
+};
