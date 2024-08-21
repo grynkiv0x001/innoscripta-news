@@ -4,6 +4,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchArticles, filterArticles } from '@/features/articles/articlesSlice';
 import { AppDispatch, RootState } from '@/app/store';
 
+import Article from '@/components/article/Article';
+
+import style from './articles.module.scss';
+
 const Articles: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
 
@@ -17,17 +21,15 @@ const Articles: React.FC = () => {
   const error = useSelector((state: RootState) => state.articles.error);
 
   useEffect(() => {
-    if (articleStatus === 'idle') {
-      dispatch(fetchArticles());
-    }
-  }, [articleStatus, dispatch]);
+    dispatch(fetchArticles());
+  }, [dispatch]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(filterArticles(e.target.value));
   };
 
   return (
-    <div>
+    <div className={style.articles}>
       <input type="text" placeholder="Search articles" onChange={handleSearch} />
       <select name="source">
         <option value="BBC">BCC</option>
@@ -39,10 +41,7 @@ const Articles: React.FC = () => {
         {articleStatus === 'success' && (
           <ul>
             {articles.map((article, index) => (
-              <li key={index}>
-                Source: {article.source}
-                {article.title}
-              </li>
+              <Article key={index} article={article} />
             ))}
           </ul>
         )}

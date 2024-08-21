@@ -1,48 +1,34 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios, { AxiosResponse } from 'axios';
 
-interface Article {
-  source: string;
-  author: string | null;
-  title: string;
-  description: string;
-  url: string;
-  urlToImage: string | null;
-  publishedAt: string;
-  content: string;
-}
+import { IArticle } from '@/types';
 
 interface ArticlesSliceState {
-  articles: Article[];
+  articles: IArticle[];
+  source?: 'nyt' | 'guardian';
   status: 'idle' | 'loading' | 'failed' | 'success';
   error: string | null;
 }
 
-// Initial state
 const initialState: ArticlesSliceState = {
   articles: [],
   status: 'idle',
   error: null,
 };
 
-// TODO: Move to .env
-const NEWS_API_KEY = '910d3cbd919044b8816401685ebeac2d';
-
-const nyt = 'bAvjbzlMS2eLKJZbbcCQAOGFTHGIVAeM';
-const nyt_secret = 'vyRn6hS5alEaZGaB';
-
-const thenewsapi = 'td9j6F3engxa0xy3wm7NgzZkDjBe3VbZzgwN91Ht';
-
-const guardianapi = '';
+const NEWS_ORG_KEY = import.meta.env.VITE_NEWS_ORG_KEY;
+const THE_NEWS_KEY = import.meta.env.VITE_THE_NEWS_KEY;
+const NYT_KEY = import.meta.env.VITE_NYT_KEY;
+const GUARDIAN_KEY = import.meta.env.VITE_GUARDIAN_KEY;
 
 const endpoints = [
-  `https://newsapi.org/v2/top-headlines?country=us&apiKey=${NEWS_API_KEY}`,
-  // `https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${nyt}`,
+  // `https://newsapi.org/v2/top-headlines?country=us&apiKey=${NEWS_ORG_KEY}`,
+  `https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=${NYT_KEY}`,
   // `https://api.thenewsapi.com/v1/news/headlines?api_token=${thenewsapi}`
   // `https://content.guardianapis.com/search?api-key=${guardianapi}`
 ];
 
-export const fetchArticles = createAsyncThunk<Article[]>(
+export const fetchArticles = createAsyncThunk<IArticle[]>(
   'articles/fetchArticles',
   async () => {
     const responses: AxiosResponse[] = await Promise.all(
@@ -57,6 +43,10 @@ export const fetchArticles = createAsyncThunk<Article[]>(
         ...article,
         source: article.source?.name || article.source,
         title: article.title || article.abstract,
+        urlToImg:
+          article.urlToImg ||
+          'https://nytimes.com/' +
+            article.multimedia.find((el) => el.subType === 'thumbnail')?.url,
       }));
     });
   },
@@ -79,7 +69,7 @@ const articlesSlice = createSlice({
       })
       .addCase(
         fetchArticles.fulfilled,
-        (state, action: PayloadAction<Article[]>) => {
+        (state, action: PayloadAction<IArticle[]>) => {
           state.status = 'success';
           state.articles = action.payload;
         },

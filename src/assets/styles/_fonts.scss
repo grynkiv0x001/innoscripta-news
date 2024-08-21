@@ -1,7 +1,14 @@
-$font-family: 'Roboto Flex';
+$primary-font: 'Roboto Flex';
+$secondary-font: 'Playfair Display';
 
 @font-face {
-  font-family: $font-family;
+  font-family: $primary-font;
   src: url('../fonts/RobotoFlex-VariableFont.ttf') format('truetype');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: $secondary-font;
+  src: url('../fonts/PlayfairDisplay-VariableFont_wght.ttf') format('truetype');
   font-display: swap;
 }

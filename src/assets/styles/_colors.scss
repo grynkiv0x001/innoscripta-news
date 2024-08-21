@@ -1,3 +1,15 @@
-@mixin colors-light() {}
+@mixin colors-light() {
+  --clr-foreground: #04030e;
+  --clr-background: #fff;
+  --clr-primary: #3435cc;
+  --clr-secondary: #e598c1;
+  --clr-accent: #d75d63;
+}
 
-@mixin colors-dark() {}
+@mixin colors-dark() {
+  --clr-foreground: #fff;
+  --clr-background: #04030c;
+  --clr-primary: #3333cc;
+  --clr-secondary: #661942;
+  --clr-accent: #a3292f;
+}
